@@ -31,6 +31,8 @@ o = st.session_state.o
 
 if st.button("Generate Transformer"):
     tranny = f.get_tranny(tranny)
+    tranny.note_sec = False
+    tranny.note_prim = False
 
     o.t_kva = f"{tranny.kva} kVA"
 
@@ -62,7 +64,10 @@ st.text(f"{o.t_kva}\n{o.t_phase}\n{o.t_prim}\n{o.t_sec}\n{o.t_ocpd}")
 
 if st.button("Solve"):
     tranny, amps_p, amps_s, ocpd_p, ocpd_s = f.get_ocpd(tranny)
-    st.text(f"Primary Amps: {amps_p}\nSecondary Amps: {amps_s}\nPrimary OCPD: {ocpd_p}A\nSecondary OCPD: {ocpd_s}A")
+    wire_p, wire_s = f.get_wire(ocpd_p, ocpd_s)
+
+    st.text(f"Primary Amps: {amps_p}\nSecondary Amps: {amps_s}\nPrimary OCPD: {ocpd_p}A\nSecondary OCPD: {ocpd_s}A\nPrimary Wire: {wire_p}\nSecondary Wire: {wire_s}")
+
     if tranny.note_prim:
         st.info("Note 1 applies to primary")
     if tranny.note_sec:

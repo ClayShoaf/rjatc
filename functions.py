@@ -13,7 +13,7 @@ def get_volts():
 
 def get_tranny(tranny):
     #tranny.kva = round(random.randint(10,500), -1)
-    tranny.kva = random.randint(1,500)
+    tranny.kva = random.randint(1,50)
     tranny.phase = random.choice(t.phases)
 
     if tranny.phase == 3:
@@ -102,3 +102,20 @@ def get_ocpd(tranny):
     else:
         ocpd_p, tranny = choose_ocpd(amps_p, True, tranny)
         return tranny, amps_p, "N/A", ocpd_p, "N/"
+
+def get_wire(ocpd_p, ocpd_s):
+    wire_p = ""
+    wire_s = ""
+    for i in t.thwn_amps.items():
+        if i[1] >= ocpd_p:
+            wire_p = i[0]
+            break
+    for i in t.thwn_amps.items():
+        if ocpd_s == "N/":
+            wire_s = "N/A"
+            break
+        if i[1] >= ocpd_s:
+            wire_s = i[0]
+            break
+    return wire_p, wire_s
+
