@@ -13,7 +13,7 @@ def get_volts():
 
 def get_tranny(tranny):
     #tranny.kva = round(random.randint(10,500), -1)
-    tranny.kva = random.randint(1,50)
+    tranny.kva = random.randint(1,31)
     tranny.phase = random.choice(t.phases)
 
     if tranny.phase == 3:
