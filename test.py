@@ -69,7 +69,8 @@ if st.button("Generate Transformer"):
         o.t_ocpd = "Primary only OCPD protection"
 
 st.write('# Transformer')
-st.text(f"{o.t_kva}\n{o.t_phase}\n{o.t_prim}\n{o.t_sec}\n{o.t_ocpd}\nAssume THWN for conductors and FMC for conduit.\nAssume neutral is the same size as the ungrounded conductors.")
+st.text('Assume THWN for conductors and FMC for conduit.\nAssume neutral is the same size as the ungrounded conductors.')
+st.text(f"{o.t_kva}\n{o.t_phase}\n{o.t_prim}\n{o.t_sec}\n{o.t_ocpd}\n")
 
 if st.button("Solve"):
     tranny, amps_p, amps_s, ocpd_p, ocpd_s = f.get_ocpd(tranny)
