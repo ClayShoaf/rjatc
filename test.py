@@ -69,8 +69,10 @@ if st.button("Generate Transformer"):
         o.t_ocpd = "Primary only OCPD protection"
 
 st.write('# Transformer')
-st.text('Assume THWN for conductors and FMC for conduit.\nAssume neutral is the same size as the ungrounded conductors.')
-st.text(f"{o.t_kva}\n{o.t_phase}\n{o.t_prim}\n{o.t_sec}\n{o.t_ocpd}\n")
+container = st.container(border=True)
+container.text(f"{o.t_kva}\n{o.t_phase}\n{o.t_prim}\n{o.t_sec}\n{o.t_ocpd}\n")
+st.write('*Assume THWN for conductors and FMC for conduit.*')
+st.write('*Assume neutral is the same size as the ungrounded conductors.*')
 
 if st.button("Solve"):
     tranny, amps_p, amps_s, ocpd_p, ocpd_s = f.get_ocpd(tranny)
@@ -95,23 +97,37 @@ if st.button("Solve"):
     else:
         pipe_s = "N/A"
 
-    output = f"\
-Primary Amps: {amps_p}\n\
-Secondary Amps: {amps_s}\n\
-Primary OCPD: {ocpd_p}A\n\
-Secondary OCPD: {ocpd_s}A\n\
-Primary Wire: {wire_p}\n\
-Secondary Wire: {wire_s}\n\
-EGC: {egc}\n\
-SSBJ: {ssbj}\n\
-Primary Conduit: {pipe_p}\n\
-Secondary Conduit: {pipe_s}\n"
-    st.text(output)
+#    output = f"\
+#Primary Amps: {amps_p}\n\
+#Secondary Amps: {amps_s}\n\
+#Primary OCPD: {ocpd_p}A\n\
+#Secondary OCPD: {ocpd_s}A\n\
+#Primary Wire: {wire_p}\n\
+#Secondary Wire: {wire_s}\n\
+#EGC: {egc}\n\
+#SSBJ: {ssbj}\n\
+#Primary Conduit: {pipe_p}\n\
+#Secondary Conduit: {pipe_s}\n"
+    #st.text(output)
 
-    if tranny.note_prim:
-        st.info("Note 1 applies to primary")
-    if tranny.note_sec:
-        st.info("Note 1 applies to secondary")
-    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader('Primary')
+    with col2:
+        st.subheader('Secondary')
+
+    con1 = col1.container(border=True)
+    con2 = col2.container(border=True)
+
+
+    with con1:
+        st.text(f"OCPD: {ocpd_p}A\nWire: {wire_p}\nEGC: {egc}\nConduit: {pipe_p}\n")
+        if tranny.note_prim:
+            st.info("Note 1 applies to primary")
+
+    with con2:
+        st.text(f"OCPD: {ocpd_s}A\nWire: {wire_s}\nEGC: {ssbj}\nConduit: {pipe_s}\n")
+        if tranny.note_sec:
+            st.info("Note 1 applies to secondary")
 
 #st.write(tranny)
