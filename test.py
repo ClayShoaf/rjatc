@@ -86,7 +86,10 @@ if st.button("Solve"):
 
     if tranny.phase == 1:
         pipe_p = f.get_conduit(wire_p, 2, egc)
-        pipe_s = f.get_conduit(wire_s, 2, egc)
+        if tranny.secondary_protection:
+            pipe_s = f.get_conduit(wire_s, 2, egc)
+        else:
+            pipe_s = "N/A"
     else:
         if tranny.wye_prim:
             pipe_p = f.get_conduit(wire_p, 4, egc)
