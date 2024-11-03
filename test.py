@@ -1,6 +1,13 @@
 import streamlit as st
 import functions as f
 
+hide_decoration_bar_style = '''
+    <style>
+        header {visibility: hidden;}
+    </style>
+'''
+st.markdown(hide_decoration_bar_style, unsafe_allow_html=True)
+
 class xfmr():
     def __init__(self, phase=2, wye_prim=False, wye_sec=False, prim=0, sec=0, kva=0, secondary_protection=True, note_prim=False, note_sec=False):
         self.phase = phase
@@ -30,6 +37,8 @@ tranny = st.session_state.tranny
 o = st.session_state.o
 
 if st.button("Generate Transformer"):
+    tranny.wye_prim = False
+    tranny.wye_sec = False
     tranny = f.get_tranny(tranny)
     tranny.note_sec = False
     tranny.note_prim = False
@@ -65,8 +74,27 @@ st.text(f"{o.t_kva}\n{o.t_phase}\n{o.t_prim}\n{o.t_sec}\n{o.t_ocpd}")
 if st.button("Solve"):
     tranny, amps_p, amps_s, ocpd_p, ocpd_s = f.get_ocpd(tranny)
     wire_p, wire_s = f.get_wire(ocpd_p, ocpd_s)
+    egc = f.get_egc(ocpd_p)
+    ######### NEEDS TO BE FIXED! WE STILL NEED WIRES ON THE SECONDARY! ##############
+    if tranny.secondary_protection:
+        ssbj = f.get_ssbj(wire_s)
+    else:
+        ssbj = "N/A"
+    pipe_p = ""
+    pipe_s = ""
 
-    st.text(f"Primary Amps: {amps_p}\nSecondary Amps: {amps_s}\nPrimary OCPD: {ocpd_p}A\nSecondary OCPD: {ocpd_s}A\nPrimary Wire: {wire_p}\nSecondary Wire: {wire_s}")
+    output = f"\
+Primary Amps: {amps_p}\n\
+Secondary Amps: {amps_s}\n\
+Primary OCPD: {ocpd_p}A\n\
+Secondary OCPD: {ocpd_s}A\n\
+Primary Wire: {wire_p}\n\
+Secondary Wire: {wire_s}\n\
+EGC: {egc}\n\
+SSBJ: {ssbj}\n\
+Primary Conduit: {pipe_p}\n\
+Secondary Conduit: {pipe_s}\n"
+    st.text(output)
 
     if tranny.note_prim:
         st.info("Note 1 applies to primary")

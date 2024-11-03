@@ -30,7 +30,11 @@ def get_tranny(tranny):
     if tranny.wye_prim or tranny.wye_sec:
         tranny.secondary_protection = True
     else:
-        tranny.secondary_protection = random.choice([True,False])
+        gacha = random.random()
+        if gacha < 0.7:
+            tranny.secondary_protection = False
+        else:
+            tranny.secondary_protection = True
     return tranny
 
 def get_amps(volts, tranny):
@@ -119,3 +123,10 @@ def get_wire(ocpd_p, ocpd_s):
             break
     return wire_p, wire_s
 
+def get_egc(ocpd_p):
+    for k,v in t.egc_size.items():
+        if k >= ocpd_p:
+            return v
+
+def get_ssbj(wire_s):
+    return t.ssbj_size[str(wire_s)]
