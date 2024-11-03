@@ -80,8 +80,19 @@ if st.button("Solve"):
         ssbj = f.get_ssbj(wire_s)
     else:
         ssbj = "N/A"
-    pipe_p = ""
-    pipe_s = ""
+
+    if tranny.wye_prim:
+        pipe_p = f.get_conduit(wire_p, 4, egc)
+    else:
+        pipe_p = f.get_conduit(wire_p, 3, egc)
+
+    if tranny.secondary_protection:
+        if tranny.wye_sec:
+            pipe_s = f.get_conduit(wire_s, 4, egc)
+        else:
+            pipe_s = f.get_conduit(wire_s, 3, egc)
+    else:
+        pipe_s = "N/A"
 
     output = f"\
 Primary Amps: {amps_p}\n\

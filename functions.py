@@ -130,3 +130,9 @@ def get_egc(ocpd_p):
 
 def get_ssbj(wire_s):
     return t.ssbj_size[str(wire_s)]
+
+def get_conduit(wire_size, num_wires, ground_size):
+    total_size = (t.thwn_area[wire_size] * num_wires) + t.thwn_area[ground_size]
+    for k,v in t.fmc_area.items():
+        if v >= total_size:
+            return k + "\""
